@@ -139,12 +139,12 @@ const sortedConcepts = [...concepts].sort((a, b) => a.order - b.order);
 
   <!-- MODULE NAVIGATION -->
   <nav class="module-navigation">
-    <a href="/" class="nav-button nav-button-back">
+    <a href={import.meta.env.BASE_URL} class="nav-button nav-button-back">
       <span class="nav-arrow">←</span>
       <span>Back to Modules</span>
     </a>
     {nextModule && (
-      <a href={`/module/${nextModule.slug}`} class="nav-button nav-button-next">
+      <a href={`${import.meta.env.BASE_URL}module/${nextModule.slug}`} class="nav-button nav-button-next">
         <span>Next Module: {nextModule.title}</span>
         <span class="nav-arrow">→</span>
       </a>

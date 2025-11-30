@@ -98,7 +98,7 @@ const sortedModules = modules.sort((a, b) => a.data.moduleNumber - b.data.module
 
     <div class="modules-grid">
       {sortedModules.map((module) => (
-        <a href={`/module/${module.slug}`} class="module-card">
+        <a href={`${import.meta.env.BASE_URL}module/${module.slug}`} class="module-card">
           <div class="module-card-header">
             <span class="module-card-number">Module {module.data.moduleNumber}</span>
             <span class="module-card-time">{module.data.estimatedTime}</span>
