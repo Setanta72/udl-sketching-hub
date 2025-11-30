@@ -7,7 +7,7 @@ export default defineConfig({
 
   // IMPORTANT: Update these for GitHub Pages deployment
   site: 'https://Setanta72.github.io',
-  base: '/udl-sketching-hub',
+  base: '/udl-sketching-hub/',
 
   output: 'static',
 
