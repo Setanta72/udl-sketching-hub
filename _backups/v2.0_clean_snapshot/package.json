@@ -1,0 +1,25 @@
+{
+  "name": "udl-sketching-hub",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Universal Design for Learning - Product Design Sketching Hub",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "generate-workbook": "node scripts/generate-workbook-pdf.js"
+  },
+  "dependencies": {
+    "@astrojs/tailwind": "^5.1.0",
+    "astro": "^4.16.0",
+    "marked": "^17.0.0",
+    "tailwindcss": "^3.4.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "puppeteer": "^24.29.1",
+    "typescript": "^5.3.3"
+  }
+}

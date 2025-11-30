@@ -1,0 +1,208 @@
+---
+/**
+ * Rubric Table Component
+ * Module-level self-assessment showing progressive mastery
+ * Shows ALL levels - learner decides where they are
+ */
+
+interface RubricCriteria {
+  criteria: string;
+  novice: string;
+  proficient: string;
+  mastery: string;
+}
+
+interface Props {
+  rubric: RubricCriteria[];
+}
+
+const { rubric } = Astro.props;
+---
+
+<div class="rubric-section">
+  <h3 class="rubric-heading">Self-Assessment Rubric</h3>
+  <p class="rubric-description">
+    Use this rubric to honestly assess your current skill level. Proficiency is the goal for all learners;
+    mastery is optional specialization. <strong>Remember</strong>: Using aids doesn't determine your level -
+    the quality of your output does.
+  </p>
+
+  <div class="rubric-table-wrapper">
+    <table class="rubric-table">
+      <thead>
+        <tr>
+          <th class="criteria-header">Criteria</th>
+          <th class="level-header level-novice" data-level="novice">
+            <span class="level-icon">🔸</span>
+            Novice
+          </th>
+          <th class="level-header level-proficient" data-level="proficient">
+            <span class="level-icon">🔹</span>
+            Proficient
+          </th>
+          <th class="level-header level-mastery" data-level="mastery">
+            <span class="level-icon">✦</span>
+            Mastery
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {rubric.map((item, index) => (
+          <tr class={index % 2 === 0 ? 'row-even' : 'row-odd'}>
+            <td class="criteria-cell">
+              <strong>{item.criteria}</strong>
+            </td>
+            <td class="level-cell level-novice-cell" data-level="novice">
+              {item.novice}
+            </td>
+            <td class="level-cell level-proficient-cell" data-level="proficient">
+              {item.proficient}
+            </td>
+            <td class="level-cell level-mastery-cell" data-level="mastery">
+              {item.mastery}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="rubric-footer">
+    <p class="rubric-note">
+      <strong>Next Steps:</strong> If you're at novice level, focus on consistent practice of the drills.
+      If you're proficient, challenge yourself with the advanced drills or work toward removing scaffolding.
+      Mastery comes with time and deliberate practice.
+    </p>
+  </div>
+</div>
+
+<style>
+  .rubric-section {
+    margin: var(--space-16) 0;
+    padding: var(--space-8);
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-lg);
+    border: 2px solid var(--color-border);
+  }
+
+  .rubric-heading {
+    font-size: var(--text-3xl);
+    font-weight: 800;
+    color: var(--color-primary);
+    margin-bottom: var(--space-4);
+    font-family: var(--font-heading);
+  }
+
+  .rubric-description {
+    color: var(--color-text-secondary);
+    line-height: var(--leading-relaxed);
+    margin-bottom: var(--space-8);
+    font-size: var(--text-lg);
+  }
+
+  .rubric-table-wrapper {
+    overflow-x: auto;
+    margin-bottom: var(--space-6);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+  }
+
+  .rubric-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    font-size: var(--text-sm);
+  }
+
+  .rubric-table thead {
+    background: var(--color-primary);
+    color: white;
+  }
+
+  .rubric-table th,
+  .rubric-table td {
+    padding: var(--space-4);
+    text-align: left;
+    border: 1px solid var(--color-border);
+  }
+
+  .criteria-header {
+    font-weight: 700;
+    min-width: 150px;
+  }
+
+  .level-header {
+    font-weight: 700;
+    text-align: center;
+    min-width: 200px;
+  }
+
+  .level-icon {
+    margin-right: var(--space-2);
+    font-size: var(--text-lg);
+  }
+
+  .criteria-cell {
+    font-weight: 600;
+    color: var(--color-text-primary);
+    vertical-align: top;
+  }
+
+  .level-cell {
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-secondary);
+    vertical-align: top;
+  }
+
+  .level-novice-cell {
+    background: rgba(231, 111, 81, 0.05);
+    border-left: 3px solid var(--color-warning);
+  }
+
+  .level-proficient-cell {
+    background: rgba(107, 144, 128, 0.05);
+    border-left: 3px solid var(--color-accent);
+  }
+
+  .level-mastery-cell {
+    background: rgba(82, 166, 117, 0.05);
+    border-left: 3px solid var(--color-success);
+  }
+
+  .row-even {
+    background: var(--color-bg-secondary);
+  }
+
+  .rubric-footer {
+    padding: var(--space-6);
+    background: var(--color-bg-accent);
+    border-radius: var(--radius);
+    border-left: 4px solid var(--color-secondary);
+  }
+
+  .rubric-note {
+    margin: 0;
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-secondary);
+  }
+
+  .rubric-note strong {
+    color: var(--color-secondary-dark);
+  }
+
+  /* Mobile responsive */
+  @media (max-width: 768px) {
+    .rubric-table {
+      font-size: var(--text-xs);
+    }
+
+    .rubric-table th,
+    .rubric-table td {
+      padding: var(--space-3);
+    }
+
+    .level-header {
+      min-width: 120px;
+    }
+  }
+</style>

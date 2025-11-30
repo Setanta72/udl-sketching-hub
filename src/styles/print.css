@@ -1,0 +1,656 @@
+/**
+ * Print Stylesheet for UDL Sketching Hub Workbook
+ * Format: A4 Landscape (297mm × 210mm)
+ * Purpose: Create print-ready PDF mockups for production
+ */
+
+/* ============================================
+   PAGE SETUP - A4 Landscape with Binding Margin
+   ============================================ */
+
+@page {
+  size: A4 landscape;
+  margin: 15mm 20mm 15mm 30mm; /* Extra left margin for spiral binding */
+}
+
+/* Ensure color graphics print correctly */
+@media print {
+  * {
+    color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+
+/* ============================================
+   HIDE WEB-ONLY ELEMENTS
+   ============================================ */
+
+@media print {
+  /* Navigation and interactive elements */
+  header,
+  footer,
+  nav,
+  .tabs,
+  .tab-button,
+  button,
+  [role="tablist"],
+  [role="tab"],
+  .back-link,
+  .next-link,
+  .jump-to-concepts {
+    display: none !important;
+  }
+
+  /* Hide video placeholders (replace with QR codes in production) */
+  .video-container {
+    display: none;
+  }
+
+  /* ============================================
+     BASE TYPOGRAPHY FOR PRINT
+     ============================================ */
+
+  body {
+    font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 10pt;
+    line-height: 1.4;
+    color: #000;
+    background: #fff;
+    margin: 0;
+    padding: 0;
+  }
+
+  h1 {
+    font-family: 'Poppins', 'Inter', sans-serif;
+    font-size: 24pt;
+    font-weight: 700;
+    color: #2E5266; /* Deep blue */
+    margin: 0 0 8mm 0;
+    page-break-after: avoid;
+  }
+
+  h2 {
+    font-family: 'Poppins', 'Inter', sans-serif;
+    font-size: 18pt;
+    font-weight: 600;
+    color: #2E5266;
+    margin: 6mm 0 4mm 0;
+    page-break-after: avoid;
+  }
+
+  h3 {
+    font-family: 'Poppins', 'Inter', sans-serif;
+    font-size: 14pt;
+    font-weight: 600;
+    color: #2E5266;
+    margin: 5mm 0 3mm 0;
+    page-break-after: avoid;
+  }
+
+  h4 {
+    font-family: 'Poppins', 'Inter', sans-serif;
+    font-size: 12pt;
+    font-weight: 600;
+    color: #333;
+    margin: 4mm 0 2mm 0;
+    page-break-after: avoid;
+  }
+
+  p {
+    margin: 0 0 3mm 0;
+    orphans: 3;
+    widows: 3;
+  }
+
+  ul, ol {
+    margin: 3mm 0;
+    padding-left: 8mm;
+  }
+
+  li {
+    margin-bottom: 2mm;
+  }
+
+  strong {
+    font-weight: 600;
+    color: #000;
+  }
+
+  em {
+    font-style: italic;
+  }
+
+  code {
+    font-family: 'Monaco', 'Courier New', monospace;
+    font-size: 9pt;
+    background: #f5f5f5;
+    padding: 1mm 2mm;
+    border-radius: 1mm;
+  }
+
+  /* ============================================
+     PAGE BREAKS & FLOW CONTROL
+     ============================================ */
+
+  /* Module starts on new page */
+  .module-header {
+    page-break-before: always;
+  }
+
+  /* Concept blocks keep together when possible */
+  .concept-block {
+    page-break-inside: avoid;
+    margin-bottom: 8mm;
+  }
+
+  /* But allow break if concept is very long */
+  .concept-block.long {
+    page-break-inside: auto;
+  }
+
+  /* Keep drill cards together */
+  .drill-card {
+    page-break-inside: avoid;
+    margin-bottom: 6mm;
+  }
+
+  /* Keep error cards together */
+  .error-card {
+    page-break-inside: avoid;
+    margin-bottom: 5mm;
+  }
+
+  /* Rubric on new page */
+  .rubric-table {
+    page-break-before: always;
+  }
+
+  /* ============================================
+     MODULE HEADER (First Page of Module)
+     ============================================ */
+
+  .module-header {
+    background: linear-gradient(135deg, #2E5266 0%, #6B9080 100%);
+    color: white;
+    padding: 15mm;
+    border-radius: 3mm;
+    margin-bottom: 10mm;
+  }
+
+  .module-header h1 {
+    color: white;
+    margin-bottom: 3mm;
+  }
+
+  .module-header .module-meta {
+    font-size: 10pt;
+    opacity: 0.9;
+    margin-bottom: 5mm;
+  }
+
+  .module-header .objectives,
+  .module-header .why-matters {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 4mm;
+    border-radius: 2mm;
+    margin-top: 4mm;
+  }
+
+  .module-header .objectives h2,
+  .module-header .why-matters h2 {
+    color: white;
+    font-size: 14pt;
+    margin-bottom: 3mm;
+  }
+
+  /* ============================================
+     CONCEPT BLOCKS
+     ============================================ */
+
+  .concept-block {
+    border-left: 4px solid #6B9080; /* Accent teal */
+    padding-left: 5mm;
+    margin-bottom: 10mm;
+  }
+
+  .concept-title {
+    font-size: 16pt;
+    font-weight: 600;
+    color: #2E5266;
+    margin-bottom: 4mm;
+  }
+
+  .concept-explanation {
+    margin-bottom: 6mm;
+    line-height: 1.5;
+  }
+
+  /* ============================================
+     PROGRESSION GALLERIES (Placeholder Boxes)
+     ============================================ */
+
+  .progression-gallery {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5mm;
+    margin: 8mm 0;
+    page-break-inside: avoid;
+  }
+
+  .gallery-item {
+    border: 2px solid #ccc;
+    border-radius: 2mm;
+    overflow: hidden;
+  }
+
+  .gallery-item.novice {
+    border-color: #E76F51; /* Warning coral */
+  }
+
+  .gallery-item.proficient {
+    border-color: #6B9080; /* Accent teal */
+  }
+
+  .gallery-item.mastery {
+    border-color: #52A675; /* Success green */
+  }
+
+  .gallery-item-header {
+    padding: 3mm;
+    font-weight: 600;
+    font-size: 10pt;
+    text-align: center;
+  }
+
+  .gallery-item.novice .gallery-item-header {
+    background: #E76F51;
+    color: white;
+  }
+
+  .gallery-item.proficient .gallery-item-header {
+    background: #6B9080;
+    color: white;
+  }
+
+  .gallery-item.mastery .gallery-item-header {
+    background: #52A675;
+    color: white;
+  }
+
+  /* Placeholder for images */
+  .gallery-image-placeholder {
+    width: 100%;
+    height: 60mm;
+    background: repeating-linear-gradient(
+      45deg,
+      #f5f5f5,
+      #f5f5f5 5mm,
+      #e0e0e0 5mm,
+      #e0e0e0 10mm
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9pt;
+    color: #666;
+    text-align: center;
+    padding: 3mm;
+  }
+
+  .gallery-caption {
+    padding: 3mm;
+    font-size: 9pt;
+    line-height: 1.3;
+    background: #f9f9f9;
+    border-top: 1px solid #e0e0e0;
+  }
+
+  /* ============================================
+     DRILL CARDS
+     ============================================ */
+
+  .drill-card {
+    border: 2px solid #6B9080;
+    border-radius: 3mm;
+    padding: 5mm;
+    margin-bottom: 6mm;
+    background: white;
+  }
+
+  .drill-title {
+    font-size: 12pt;
+    font-weight: 600;
+    color: #2E5266;
+    margin-bottom: 2mm;
+  }
+
+  .drill-time {
+    font-size: 9pt;
+    color: #666;
+    margin-bottom: 3mm;
+  }
+
+  .drill-description {
+    margin-bottom: 4mm;
+    line-height: 1.4;
+  }
+
+  .drill-scaffolding {
+    background: #FFF9E6; /* Light yellow */
+    border-left: 3px solid #F4A259; /* Warm orange */
+    padding: 3mm 4mm;
+    margin-top: 4mm;
+    border-radius: 2mm;
+  }
+
+  .drill-scaffolding strong {
+    color: #D68940;
+  }
+
+  /* Practice space for drills */
+  .practice-space {
+    margin-top: 5mm;
+    min-height: 80mm;
+    border: 1px dashed #ccc;
+    border-radius: 2mm;
+    background:
+      linear-gradient(#e0e0e0 1px, transparent 1px),
+      linear-gradient(90deg, #e0e0e0 1px, transparent 1px);
+    background-size: 5mm 5mm;
+    background-position: -1px -1px;
+  }
+
+  .practice-space::before {
+    content: "Practice Space - Use this area to complete the drill";
+    display: block;
+    padding: 3mm;
+    font-size: 9pt;
+    color: #999;
+    font-style: italic;
+  }
+
+  /* ============================================
+     COMMON ERRORS
+     ============================================ */
+
+  .error-card {
+    border: 2px solid #E76F51;
+    border-radius: 3mm;
+    padding: 5mm;
+    margin-bottom: 5mm;
+    background: #FFF5F5;
+  }
+
+  .error-title {
+    font-size: 11pt;
+    font-weight: 600;
+    color: #C44F37;
+    margin-bottom: 2mm;
+  }
+
+  .error-description {
+    margin-bottom: 3mm;
+    line-height: 1.4;
+  }
+
+  .error-diagnosis,
+  .error-correction {
+    margin: 3mm 0;
+  }
+
+  .error-diagnosis strong,
+  .error-correction strong {
+    color: #C44F37;
+  }
+
+  .error-when-to-use-aids {
+    background: #FFF9E6;
+    border-left: 3px solid #F4A259;
+    padding: 3mm 4mm;
+    margin-top: 3mm;
+    font-size: 9pt;
+    border-radius: 2mm;
+  }
+
+  /* ============================================
+     PHYSICAL vs DIGITAL TIPS
+     ============================================ */
+
+  .modes-of-expression {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6mm;
+    margin: 6mm 0;
+    page-break-inside: avoid;
+  }
+
+  .mode-section {
+    border: 2px solid #ccc;
+    border-radius: 3mm;
+    padding: 4mm;
+    background: white;
+  }
+
+  .mode-section h4 {
+    margin-top: 0;
+    color: #2E5266;
+  }
+
+  .mode-section.physical {
+    border-color: #8B4513; /* Brown for physical */
+    background: #FFF9F5;
+  }
+
+  .mode-section.digital {
+    border-color: #4A90E2; /* Blue for digital */
+    background: #F5F9FF;
+  }
+
+  /* ============================================
+     RUBRIC TABLE
+     ============================================ */
+
+  .rubric-table {
+    page-break-before: always;
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10mm 0;
+  }
+
+  .rubric-table caption {
+    font-size: 16pt;
+    font-weight: 600;
+    color: #2E5266;
+    text-align: left;
+    margin-bottom: 5mm;
+  }
+
+  .rubric-table th,
+  .rubric-table td {
+    border: 2px solid #2E5266;
+    padding: 4mm;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .rubric-table th {
+    background: #2E5266;
+    color: white;
+    font-weight: 600;
+    font-size: 10pt;
+  }
+
+  .rubric-table td {
+    font-size: 9pt;
+    line-height: 1.4;
+  }
+
+  /* Column widths */
+  .rubric-table th:first-child,
+  .rubric-table td:first-child {
+    width: 25%;
+  }
+
+  /* Level indicators */
+  .rubric-table .level-novice {
+    background: #FFE8E5;
+  }
+
+  .rubric-table .level-proficient {
+    background: #E8F5F0;
+  }
+
+  .rubric-table .level-mastery {
+    background: #E5F9ED;
+  }
+
+  /* Self-assessment checkboxes */
+  .self-assessment-box {
+    margin-top: 8mm;
+    padding: 5mm;
+    border: 2px solid #6B9080;
+    border-radius: 3mm;
+    background: #F5F9F7;
+  }
+
+  .self-assessment-box h3 {
+    margin-top: 0;
+    color: #2E5266;
+  }
+
+  .assessment-checklist {
+    list-style: none;
+    padding: 0;
+  }
+
+  .assessment-checklist li {
+    margin-bottom: 4mm;
+  }
+
+  .assessment-checklist li::before {
+    content: "☐ ";
+    font-size: 14pt;
+    margin-right: 3mm;
+  }
+
+  /* ============================================
+     QR CODE PLACEHOLDERS
+     ============================================ */
+
+  .qr-code-placeholder {
+    width: 30mm;
+    height: 30mm;
+    border: 2px dashed #666;
+    border-radius: 2mm;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9pt;
+    color: #666;
+    text-align: center;
+    padding: 2mm;
+    background: white;
+  }
+
+  .qr-code-section {
+    margin: 6mm 0;
+    padding: 4mm;
+    background: #f9f9f9;
+    border-radius: 2mm;
+    display: flex;
+    align-items: center;
+    gap: 5mm;
+  }
+
+  .qr-code-label {
+    font-size: 9pt;
+    color: #333;
+  }
+
+  /* ============================================
+     PAGE NUMBERS & FOOTERS
+     ============================================ */
+
+  @page {
+    @bottom-right {
+      content: "Page " counter(page);
+      font-size: 9pt;
+      color: #666;
+    }
+
+    @bottom-left {
+      content: "UDL Sketching Hub Workbook";
+      font-size: 9pt;
+      color: #666;
+    }
+
+    @bottom-center {
+      content: "© 2025 - For Educational Use";
+      font-size: 8pt;
+      color: #999;
+    }
+  }
+
+  /* ============================================
+     SUPPLEMENTARY PAGE STYLES
+     ============================================ */
+
+  /* Cover page */
+  .cover-page {
+    page-break-after: always;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: linear-gradient(135deg, #2E5266 0%, #6B9080 100%);
+    color: white;
+  }
+
+  .cover-page h1 {
+    font-size: 36pt;
+    color: white;
+    margin-bottom: 5mm;
+  }
+
+  .cover-page .subtitle {
+    font-size: 18pt;
+    margin-bottom: 15mm;
+  }
+
+  /* Practice grid pages */
+  .practice-grid-page {
+    background:
+      linear-gradient(#d0d0d0 1px, transparent 1px),
+      linear-gradient(90deg, #d0d0d0 1px, transparent 1px);
+    background-size: 5mm 5mm;
+    background-position: 0 0;
+    min-height: 100%;
+  }
+
+  /* ============================================
+     UTILITY CLASSES
+     ============================================ */
+
+  .page-break-before {
+    page-break-before: always;
+  }
+
+  .page-break-after {
+    page-break-after: always;
+  }
+
+  .no-break {
+    page-break-inside: avoid;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  .screen-only {
+    display: none !important;
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "Cone of Vision (C.O.V.)": "The approximately 60-degree cone from the viewer's eye that represents the distortion-free viewing area. Objects outside this cone appear warped.",
+  "Minor Axis": "The shortest diameter of an ellipse. In perspective drawing, the minor axis is always aligned with the perspective axis (center line) of a cylinder or circular form.",
+  "Major Axis": "The longest diameter of an ellipse, perpendicular to the minor axis.",
+  "Core Shadow": "The part of an object that faces away from the light source. Also called form shadow.",
+  "Terminator": "The edge between the light side and shadow side of an object. Often appears as the darkest area due to the rapid transition from light to shadow."
+}

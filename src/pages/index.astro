@@ -1,0 +1,486 @@
+---
+/**
+ * HOMEPAGE v2.0
+ * Introduces progressive mastery philosophy
+ * NO Learning Mode Toggle - removed in v2.0
+ */
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+// Get all module entries
+const modules = await getCollection('modules');
+const sortedModules = modules.sort((a, b) => a.data.moduleNumber - b.data.moduleNumber);
+---
+
+<BaseLayout title="Home">
+  <!-- HERO SECTION -->
+  <section class="hero">
+    <h1 class="hero-title">Product Design Sketching</h1>
+    <p class="hero-subtitle">
+      A progressive learning platform supporting all learners from novice to proficient to mastery
+    </p>
+  </section>
+
+  <!-- PHILOSOPHY -->
+  <section class="philosophy">
+    <h2>Progressive Mastery Learning</h2>
+    <p class="philosophy-intro">
+      This platform supports your journey through skill development. <strong>Proficiency is the goal for everyone</strong> - mastery is optional specialization that comes with continued practice.
+    </p>
+
+    <div class="progression-visual">
+      <div class="progression-stage stage-novice">
+        <div class="stage-icon">🔸</div>
+        <h3>Novice</h3>
+        <p>Building foundations, learning principles, frequent errors are normal</p>
+      </div>
+      <div class="progression-arrow">→</div>
+      <div class="progression-stage stage-proficient">
+        <div class="stage-icon">🔹</div>
+        <h3>Proficient</h3>
+        <p>Goal for all learners: Can produce quality work with or without aids</p>
+      </div>
+      <div class="progression-arrow">→</div>
+      <div class="progression-stage stage-mastery">
+        <div class="stage-icon">✦</div>
+        <h3>Mastery</h3>
+        <p>Optional specialization: Intuitive, rapid, expressive work</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCAFFOLDING MESSAGE -->
+  <section class="scaffolding-message">
+    <div class="message-icon">💡</div>
+    <div class="message-content">
+      <h3>About Using Aids & Guides</h3>
+      <p>
+        Rulers, grids, templates, and digital guides are <strong>legitimate tools</strong> - not training wheels.
+        Professional designers use them. The goal is to understand <em>when</em> aids help you work better
+        and <em>when</em> freehand sketching serves your purpose. Quality of output matters, not whether you used aids to achieve it.
+      </p>
+    </div>
+  </section>
+
+  <!-- UDL PRINCIPLES -->
+  <section class="udl-principles">
+    <h2>Built on Universal Design for Learning</h2>
+
+    <div class="principles-grid">
+      <div class="principle-card">
+        <span class="principle-icon">🎯</span>
+        <h3>Multiple Ways to Learn</h3>
+        <p>Video tutorials, step-by-step PDFs, example galleries at different skill levels</p>
+      </div>
+
+      <div class="principle-card">
+        <span class="principle-icon">🛠️</span>
+        <h3>Multiple Ways to Practice</h3>
+        <p>Physical or digital tools, aided or freehand, scaffolded progression at your pace</p>
+      </div>
+
+      <div class="principle-card">
+        <span class="principle-icon">💪</span>
+        <h3>Self-Assessment & Growth</h3>
+        <p>Clear rubrics showing progression, contextual error help, honest self-evaluation</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODULES GRID -->
+  <section class="modules-section">
+    <h2>The 7 Modules</h2>
+    <p class="modules-intro">
+      Each module contains multiple concepts. Learn at your own pace, use the scaffolding suggestions,
+      and track your progress honestly.
+    </p>
+
+    <div class="modules-grid">
+      {sortedModules.map((module) => (
+        <a href={`/module/${module.slug}`} class="module-card">
+          <div class="module-card-header">
+            <span class="module-card-number">Module {module.data.moduleNumber}</span>
+            <span class="module-card-time">{module.data.estimatedTime}</span>
+          </div>
+          <h3 class="module-card-title">{module.data.title}</h3>
+          <p class="module-card-description">{module.data.description}</p>
+          <div class="module-card-footer">
+            <span class="module-card-link">Start Learning →</span>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- GETTING STARTED -->
+  <section class="getting-started">
+    <h2>Getting Started</h2>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <h3>Start with Module 1</h3>
+        <p>Build fundamental skills in biomechanics and line quality</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <h3>Progress Through Concepts</h3>
+        <p>Each module has multiple concepts - work through them sequentially</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <h3>Practice with Scaffolding</h3>
+        <p>Use aids when suggested, gradually reduce as you build confidence</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">4</div>
+        <h3>Self-Assess Honestly</h3>
+        <p>Use rubrics to identify your current level and what to practice next</p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* === HERO === */
+  .hero {
+    text-align: center;
+    padding: var(--space-16) 0 var(--space-12);
+  }
+
+  .hero-title {
+    font-size: var(--text-5xl);
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: var(--space-4);
+  }
+
+  .hero-subtitle {
+    font-size: var(--text-xl);
+    color: var(--color-text-secondary);
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: var(--leading-relaxed);
+  }
+
+  /* === PHILOSOPHY === */
+  .philosophy {
+    margin: var(--space-16) 0;
+    text-align: center;
+  }
+
+  .philosophy h2 {
+    margin-bottom: var(--space-6);
+    color: var(--color-primary);
+  }
+
+  .philosophy-intro {
+    font-size: var(--text-lg);
+    line-height: var(--leading-relaxed);
+    max-width: 800px;
+    margin: 0 auto var(--space-12);
+    color: var(--color-text-secondary);
+  }
+
+  .progression-visual {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-6);
+    flex-wrap: wrap;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .progression-stage {
+    flex: 1;
+    min-width: 200px;
+    padding: var(--space-8);
+    background: white;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    border: 3px solid;
+  }
+
+  .stage-novice {
+    border-color: var(--color-warning);
+  }
+
+  .stage-proficient {
+    border-color: var(--color-accent);
+  }
+
+  .stage-mastery {
+    border-color: var(--color-success);
+  }
+
+  .stage-icon {
+    font-size: var(--text-5xl);
+    margin-bottom: var(--space-4);
+  }
+
+  .progression-stage h3 {
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    margin-bottom: var(--space-3);
+  }
+
+  .progression-stage p {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: var(--leading-relaxed);
+    margin: 0;
+  }
+
+  .progression-arrow {
+    font-size: var(--text-4xl);
+    color: var(--color-text-tertiary);
+    flex-shrink: 0;
+  }
+
+  /* === SCAFFOLDING MESSAGE === */
+  .scaffolding-message {
+    display: flex;
+    gap: var(--space-6);
+    padding: var(--space-8);
+    background: var(--color-bg-accent);
+    border-left: 6px solid var(--color-secondary);
+    border-radius: var(--radius-lg);
+    margin: var(--space-16) 0;
+  }
+
+  .message-icon {
+    font-size: var(--text-5xl);
+    flex-shrink: 0;
+  }
+
+  .message-content h3 {
+    font-size: var(--text-2xl);
+    color: var(--color-secondary-dark);
+    margin-bottom: var(--space-3);
+  }
+
+  .message-content p {
+    font-size: var(--text-lg);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  /* === UDL PRINCIPLES === */
+  .udl-principles {
+    margin: var(--space-16) 0;
+  }
+
+  .udl-principles h2 {
+    text-align: center;
+    margin-bottom: var(--space-8);
+    color: var(--color-primary);
+  }
+
+  .principles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-8);
+  }
+
+  .principle-card {
+    background: var(--color-bg-secondary);
+    padding: var(--space-8);
+    border-radius: var(--radius-lg);
+    text-align: center;
+    border: 2px solid var(--color-border);
+    transition: all var(--transition-base);
+  }
+
+  .principle-card:hover {
+    border-color: var(--color-secondary);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .principle-icon {
+    font-size: var(--text-5xl);
+    display: block;
+    margin-bottom: var(--space-4);
+  }
+
+  .principle-card h3 {
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-3);
+    color: var(--color-primary);
+  }
+
+  .principle-card p {
+    color: var(--color-text-secondary);
+    line-height: var(--leading-relaxed);
+    margin: 0;
+  }
+
+  /* === MODULES SECTION === */
+  .modules-section {
+    margin: var(--space-20) 0;
+  }
+
+  .modules-section h2 {
+    text-align: center;
+    margin-bottom: var(--space-4);
+    color: var(--color-primary);
+  }
+
+  .modules-intro {
+    text-align: center;
+    color: var(--color-text-secondary);
+    font-size: var(--text-lg);
+    max-width: 700px;
+    margin: 0 auto var(--space-12);
+    line-height: var(--leading-relaxed);
+  }
+
+  .modules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: var(--space-8);
+  }
+
+  .module-card {
+    background: white;
+    border: 3px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-8);
+    text-decoration: none;
+    color: inherit;
+    transition: all var(--transition-base);
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow);
+  }
+
+  .module-card:hover {
+    border-color: var(--color-secondary);
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-xl);
+  }
+
+  .module-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-4);
+  }
+
+  .module-card-number {
+    display: inline-block;
+    background: var(--color-primary);
+    color: white;
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-lg);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .module-card-time {
+    font-size: var(--text-sm);
+    color: var(--color-text-tertiary);
+  }
+
+  .module-card-title {
+    font-size: var(--text-2xl);
+    margin-bottom: var(--space-3);
+    color: var(--color-primary);
+  }
+
+  .module-card-description {
+    color: var(--color-text-secondary);
+    line-height: var(--leading-relaxed);
+    flex: 1;
+    margin-bottom: var(--space-6);
+  }
+
+  .module-card-footer {
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--space-4);
+  }
+
+  .module-card-link {
+    color: var(--color-secondary);
+    font-weight: 700;
+    font-size: var(--text-base);
+    transition: color var(--transition-base);
+  }
+
+  .module-card:hover .module-card-link {
+    color: var(--color-secondary-dark);
+  }
+
+  /* === GETTING STARTED === */
+  .getting-started {
+    margin: var(--space-20) 0;
+    padding: var(--space-12);
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-xl);
+  }
+
+  .getting-started h2 {
+    text-align: center;
+    margin-bottom: var(--space-12);
+    color: var(--color-primary);
+  }
+
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--space-8);
+  }
+
+  .step-card {
+    text-align: center;
+  }
+
+  .step-number {
+    width: 60px;
+    height: 60px;
+    background: var(--color-secondary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--text-3xl);
+    font-weight: 800;
+    margin: 0 auto var(--space-4);
+  }
+
+  .step-card h3 {
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-3);
+    color: var(--color-primary);
+  }
+
+  .step-card p {
+    color: var(--color-text-secondary);
+    line-height: var(--leading-relaxed);
+    margin: 0;
+  }
+
+  /* Mobile responsive */
+  @media (max-width: 768px) {
+    .hero-title {
+      font-size: var(--text-4xl);
+    }
+
+    .progression-arrow {
+      transform: rotate(90deg);
+    }
+
+    .scaffolding-message {
+      flex-direction: column;
+      text-align: center;
+    }
+  }
+</style>

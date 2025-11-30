@@ -1,0 +1,219 @@
+---
+/**
+ * Base Layout
+ * The foundational layout for all pages
+ * Includes header with navigation and learning mode toggle
+ */
+
+import LearningModeToggle from '../components/LearningModeToggle.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "Universal Design for Learning - Product Design Sketching Hub" } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <title>{title} | UDL Sketching Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <!-- HEADER: Site navigation and branding -->
+    <header class="site-header">
+      <div class="container">
+        <nav class="main-nav">
+          <a href="/" class="logo">
+            <span class="logo-icon">✏️</span>
+            <span class="logo-text">UDL Sketching Hub</span>
+          </a>
+
+          <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/about">About UDL</a></li>
+          </ul>
+        </nav>
+
+        <!-- Learning Mode Toggle in header for site-wide access -->
+        <div class="header-toggle">
+          <LearningModeToggle />
+        </div>
+      </div>
+    </header>
+
+    <!-- MAIN CONTENT: Page-specific content goes here -->
+    <main class="site-main">
+      <div class="container">
+        <slot />
+      </div>
+    </main>
+
+    <!-- FOOTER: Additional resources and credits -->
+    <footer class="site-footer">
+      <div class="container">
+        <p>© 2024 UDL Sketching Hub. Built with Universal Design for Learning principles.</p>
+        <p class="footer-note">Designed to serve learners of all abilities on their path to sketching mastery.</p>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style is:global>
+  /* ===== GLOBAL RESETS & BASE STYLES ===== */
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  :root {
+    /* CSS Custom Properties for easy theming */
+    --color-primary: #2C3E50;
+    --color-secondary: #E74C3C;
+    --color-background: #FFFFFF;
+    --color-surface: #F8F9FA;
+    --color-text-primary: #2C3E50;
+    --color-text-secondary: #7F8C8D;
+
+    --font-sans: 'Inter', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 1.5rem;
+    --spacing-lg: 2rem;
+    --spacing-xl: 3rem;
+  }
+
+  html {
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    color: var(--color-text-primary);
+    background: var(--color-background);
+  }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ===== CONTAINER ===== */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  /* ===== HEADER ===== */
+  .site-header {
+    background: var(--color-primary);
+    color: white;
+    padding: 1rem 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .main-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: white;
+    font-weight: 700;
+    font-size: 1.25rem;
+  }
+
+  .logo-icon {
+    font-size: 1.5rem;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    transition: opacity 0.2s;
+  }
+
+  .nav-links a:hover {
+    opacity: 0.8;
+  }
+
+  .header-toggle {
+    background: white;
+    border-radius: 8px;
+    padding: 0.5rem;
+  }
+
+  /* ===== MAIN CONTENT ===== */
+  .site-main {
+    flex: 1;
+    padding: 2rem 0;
+  }
+
+  /* ===== FOOTER ===== */
+  .site-footer {
+    background: var(--color-surface);
+    padding: 2rem 0;
+    text-align: center;
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+    margin-top: 4rem;
+  }
+
+  .footer-note {
+    margin-top: 0.5rem;
+    font-style: italic;
+  }
+
+  /* ===== TYPOGRAPHY ===== */
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--color-text-primary);
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  h2 {
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  a {
+    color: var(--color-secondary);
+  }
+
+  /* ===== UTILITIES ===== */
+  .hidden {
+    display: none !important;
+  }
+</style>

@@ -1,0 +1,135 @@
+---
+/**
+ * Common Errors Accordion Component
+ * Displays pitfalls, diagnosis, and corrections in an expandable accordion
+ * Uses HTML details/summary for native accessibility
+ */
+
+interface Props {
+  errors: Array<{
+    pitfall: string;
+    diagnosis: string;
+    correction: string;
+  }>;
+}
+
+const { errors } = Astro.props;
+---
+
+<div class="common-errors-section">
+  <h3 class="section-heading">Self-Support: Common Errors & Pitfalls</h3>
+  <p class="section-intro">
+    Stuck? These common pitfalls and their solutions can help you self-diagnose and improve.
+  </p>
+
+  <div class="accordion">
+    {errors.map((error, index) => (
+      <details class="accordion-item">
+        <summary class="accordion-trigger">
+          <span class="pitfall-icon">⚠️</span>
+          <span class="pitfall-text">{error.pitfall}</span>
+          <span class="expand-icon">▼</span>
+        </summary>
+        <div class="accordion-content">
+          <div class="diagnosis">
+            <strong>Diagnosis:</strong> {error.diagnosis}
+          </div>
+          <div class="correction">
+            <strong>Correction:</strong> {error.correction}
+          </div>
+        </div>
+      </details>
+    ))}
+  </div>
+</div>
+
+<style>
+  .common-errors-section {
+    margin: 2rem 0;
+  }
+
+  .section-heading {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary, #2C3E50);
+    margin-bottom: 0.5rem;
+  }
+
+  .section-intro {
+    color: var(--text-secondary, #7F8C8D);
+    margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+
+  .accordion {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .accordion-item {
+    border: 1px solid #E0E0E0;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .accordion-trigger {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: var(--surface, #F8F9FA);
+    cursor: pointer;
+    user-select: none;
+    list-style: none;
+    font-weight: 500;
+    color: var(--text-primary, #2C3E50);
+    transition: background 0.2s ease;
+  }
+
+  .accordion-trigger:hover {
+    background: #EEEEEE;
+  }
+
+  .accordion-trigger::-webkit-details-marker {
+    display: none;
+  }
+
+  .pitfall-icon {
+    font-size: 1.25rem;
+  }
+
+  .pitfall-text {
+    flex: 1;
+  }
+
+  .expand-icon {
+    font-size: 0.75rem;
+    transition: transform 0.2s ease;
+  }
+
+  details[open] .expand-icon {
+    transform: rotate(180deg);
+  }
+
+  .accordion-content {
+    padding: 1.5rem;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .diagnosis,
+  .correction {
+    line-height: 1.6;
+  }
+
+  .diagnosis strong {
+    color: var(--secondary, #E74C3C);
+  }
+
+  .correction strong {
+    color: #27AE60;
+  }
+</style>

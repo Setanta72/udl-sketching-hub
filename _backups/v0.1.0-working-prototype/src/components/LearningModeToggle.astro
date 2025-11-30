@@ -1,0 +1,144 @@
+---
+/**
+ * Learning Mode Toggle Component
+ * Site-wide toggle between Guided Path and Mastery Path
+ * Saves selection to localStorage and filters content accordingly
+ */
+---
+
+<div class="learning-mode-toggle" data-learning-toggle data-current-mode="guided">
+  <label class="toggle-label">
+    <span class="label-text">Learning Mode:</span>
+    <div class="toggle-container">
+      <button
+        class="mode-button guided-button active"
+        data-mode="guided"
+        aria-pressed="true"
+      >
+        Guided Path
+      </button>
+      <button
+        class="mode-button mastery-button"
+        data-mode="mastery"
+        aria-pressed="false"
+      >
+        Mastery Path
+      </button>
+    </div>
+  </label>
+  <p class="mode-description">
+    <span data-mode-desc="guided">For learners aiming for proficiency using aids (rulers, templates, guides)</span>
+    <span data-mode-desc="mastery" class="hidden">For learners pursuing freehand mastery with minimal aids</span>
+  </p>
+</div>
+
+<style>
+  .learning-mode-toggle {
+    background: var(--surface, #F8F9FA);
+    border: 2px solid var(--primary, #2C3E50);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1rem 0;
+  }
+
+  .toggle-label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .label-text {
+    font-weight: 600;
+    color: var(--text-primary, #2C3E50);
+    font-size: 1.125rem;
+  }
+
+  .toggle-container {
+    display: flex;
+    gap: 0.5rem;
+    background: white;
+    padding: 0.25rem;
+    border-radius: 6px;
+  }
+
+  .mode-button {
+    flex: 1;
+    padding: 0.75rem 1.5rem;
+    border: 2px solid transparent;
+    border-radius: 4px;
+    background: transparent;
+    color: var(--text-secondary, #7F8C8D);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .mode-button:hover {
+    background: var(--surface, #F8F9FA);
+  }
+
+  .mode-button.active {
+    background: var(--primary, #2C3E50);
+    color: white;
+    border-color: var(--primary, #2C3E50);
+  }
+
+  .mode-description {
+    margin-top: 0.75rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary, #7F8C8D);
+    line-height: 1.5;
+  }
+
+  .hidden {
+    display: none;
+  }
+</style>
+
+<script>
+  import { getLearningMode, setLearningMode, applyLearningModeFilter } from '../scripts/learningMode';
+
+  // Initialize on page load
+  document.addEventListener('DOMContentLoaded', () => {
+    const mode = getLearningMode();
+    updateToggleUI(mode);
+    applyLearningModeFilter(mode);
+  });
+
+  // Handle button clicks
+  document.addEventListener('click', (e) => {
+    const button = (e.target as HTMLElement).closest('[data-mode]');
+    if (!button) return;
+
+    const mode = button.getAttribute('data-mode') as 'guided' | 'mastery';
+    setLearningMode(mode);
+    updateToggleUI(mode);
+    applyLearningModeFilter(mode);
+  });
+
+  function updateToggleUI(mode: 'guided' | 'mastery') {
+    // Update button states
+    const buttons = document.querySelectorAll('.mode-button');
+    buttons.forEach((btn) => {
+      const btnMode = btn.getAttribute('data-mode');
+      if (btnMode === mode) {
+        btn.classList.add('active');
+        btn.setAttribute('aria-pressed', 'true');
+      } else {
+        btn.classList.remove('active');
+        btn.setAttribute('aria-pressed', 'false');
+      }
+    });
+
+    // Update description text
+    const descriptions = document.querySelectorAll('[data-mode-desc]');
+    descriptions.forEach((desc) => {
+      const descMode = (desc as HTMLElement).dataset.modeDesc;
+      if (descMode === mode) {
+        desc.classList.remove('hidden');
+      } else {
+        desc.classList.add('hidden');
+      }
+    });
+  }
+</script>

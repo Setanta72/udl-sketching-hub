@@ -1,0 +1,27 @@
+---
+/**
+ * DYNAMIC MODULE PAGE
+ * Generates a page for each module using the slug
+ * Uses ModuleLayout to apply the 7-section structure
+ */
+
+import { getCollection } from 'astro:content';
+import ModuleLayout from '../../layouts/ModuleLayout.astro';
+
+// Generate static paths for all modules
+export async function getStaticPaths() {
+  const modules = await getCollection('modules');
+
+  return modules.map((module) => ({
+    params: { slug: module.slug },
+    props: { module },
+  }));
+}
+
+const { module } = Astro.props;
+const { Content } = await module.render();
+---
+
+<ModuleLayout frontmatter={module.data}>
+  <Content />
+</ModuleLayout>

@@ -1,0 +1,78 @@
+---
+/**
+ * Drills List Component
+ * Displays drill items that are filtered by learning mode
+ * Uses data-paths attribute to show/hide based on current mode
+ */
+
+interface Props {
+  drills: Array<{
+    text: string;
+    paths: Array<'guided' | 'mastery'>;
+  }>;
+}
+
+const { drills } = Astro.props;
+---
+
+<div class="drills-section">
+  <h3 class="section-heading">Skills & Drills</h3>
+  <p class="section-intro">
+    Practice these exercises to develop muscle memory and technical confidence.
+    The drills shown adapt to your selected Learning Mode.
+  </p>
+
+  <ul class="drills-list">
+    {drills.map((drill) => (
+      <li
+        class="drill-item"
+        data-paths={drill.paths.join(',')}
+        set:html={drill.text}
+      />
+    ))}
+  </ul>
+</div>
+
+<style>
+  .drills-section {
+    margin: 2rem 0;
+  }
+
+  .section-heading {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary, #2C3E50);
+    margin-bottom: 0.5rem;
+  }
+
+  .section-intro {
+    color: var(--text-secondary, #7F8C8D);
+    margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+
+  .drills-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .drill-item {
+    padding: 1rem;
+    background: var(--surface, #F8F9FA);
+    border-left: 4px solid var(--secondary, #E74C3C);
+    border-radius: 4px;
+    line-height: 1.6;
+  }
+
+  .drill-item.hidden {
+    display: none;
+  }
+
+  /* Style the bold drill label */
+  .drill-item :global(strong) {
+    color: var(--primary, #2C3E50);
+  }
+</style>

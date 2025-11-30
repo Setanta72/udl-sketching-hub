@@ -1,0 +1,323 @@
+---
+/**
+ * HOMEPAGE
+ * Introduces the UDL philosophy and displays module grid
+ */
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+// Get all module entries
+const modules = await getCollection('modules');
+const sortedModules = modules.sort((a, b) => a.data.moduleNumber - b.data.moduleNumber);
+---
+
+<BaseLayout title="Home">
+  <!-- HERO SECTION -->
+  <section class="hero">
+    <h1 class="hero-title">Welcome to the UDL Sketching Hub</h1>
+    <p class="hero-subtitle">
+      A self-paced learning resource for product design sketching, built on
+      <strong>Universal Design for Learning</strong> principles.
+    </p>
+    <p class="hero-description">
+      Whether you're aiming for <strong>proficiency with aids</strong> or
+      <strong>freehand mastery</strong>, this hub adapts to your learning path.
+    </p>
+  </section>
+
+  <!-- UDL PRINCIPLES -->
+  <section class="udl-principles">
+    <h2>Built on Three UDL Principles</h2>
+
+    <div class="principles-grid">
+      <div class="principle-card">
+        <span class="principle-icon">🎯</span>
+        <h3>Multiple Means of Representation</h3>
+        <p>Learn through video, text guides, galleries, and interactive glossaries.</p>
+      </div>
+
+      <div class="principle-card">
+        <span class="principle-icon">🛠️</span>
+        <h3>Multiple Means of Action & Expression</h3>
+        <p>Choose physical or digital tools. Use aids or go freehand. It's your path.</p>
+      </div>
+
+      <div class="principle-card">
+        <span class="principle-icon">💪</span>
+        <h3>Multiple Means of Engagement</h3>
+        <p>Self-assess your progress with mastery rubrics tailored to your goals.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- LEARNING PATHS EXPLANATION -->
+  <section class="learning-paths">
+    <h2>Choose Your Learning Path</h2>
+
+    <div class="paths-grid">
+      <div class="path-card guided">
+        <h3>📐 Guided Path</h3>
+        <p>
+          Achieve <strong>proficiency</strong> using aids like rulers, templates, and guides
+          to produce accurate, high-fidelity work.
+        </p>
+        <ul>
+          <li>Perfect for meeting course requirements</li>
+          <li>Focus on technical accuracy</li>
+          <li>Build confidence with support tools</li>
+        </ul>
+      </div>
+
+      <div class="path-card mastery">
+        <h3>✍️ Mastery Path</h3>
+        <p>
+          Develop <strong>freehand mastery</strong> with minimal aids for rapid,
+          gestural sketching and ideation.
+        </p>
+        <ul>
+          <li>Perfect for rapid ideation</li>
+          <li>Focus on gestural confidence</li>
+          <li>Build muscle memory and intuition</li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="paths-note">
+      💡 <strong>Tip:</strong> Use the Learning Mode toggle above to filter content
+      based on your chosen path. You can switch anytime!
+    </p>
+  </section>
+
+  <!-- MODULES GRID -->
+  <section class="modules-section">
+    <h2>The 7 Modules</h2>
+    <p class="modules-intro">
+      Each module follows a structured learning path with concepts, resources,
+      drills, and self-assessment.
+    </p>
+
+    <div class="modules-grid">
+      {sortedModules.map((module) => (
+        <a href={`/module/${module.slug}`} class="module-card">
+          <span class="module-card-number">Module {module.data.moduleNumber}</span>
+          <h3 class="module-card-title">{module.data.title}</h3>
+          {module.data.description && (
+            <p class="module-card-description">{module.data.description}</p>
+          )}
+          <span class="module-card-link">Start Learning →</span>
+        </a>
+      ))}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* HERO SECTION */
+  .hero {
+    text-align: center;
+    padding: 3rem 0;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .hero-title {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1.25rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+
+  .hero-description {
+    font-size: 1.125rem;
+    line-height: 1.6;
+  }
+
+  /* UDL PRINCIPLES */
+  .udl-principles {
+    margin: 4rem 0;
+  }
+
+  .udl-principles h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .principles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+  }
+
+  .principle-card {
+    background: var(--color-surface);
+    padding: 2rem;
+    border-radius: 8px;
+    text-align: center;
+  }
+
+  .principle-icon {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  .principle-card h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .principle-card p {
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+  }
+
+  /* LEARNING PATHS */
+  .learning-paths {
+    margin: 4rem 0;
+  }
+
+  .learning-paths h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .paths-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .path-card {
+    background: var(--color-surface);
+    padding: 2rem;
+    border-radius: 8px;
+    border: 3px solid transparent;
+  }
+
+  .path-card.guided {
+    border-color: #3498DB;
+  }
+
+  .path-card.mastery {
+    border-color: #9B59B6;
+  }
+
+  .path-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .path-card p {
+    margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+
+  .path-card ul {
+    list-style: none;
+    padding-left: 0;
+  }
+
+  .path-card li {
+    padding: 0.5rem 0;
+    padding-left: 1.5rem;
+    position: relative;
+  }
+
+  .path-card li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--color-secondary);
+    font-weight: bold;
+  }
+
+  .paths-note {
+    background: #FFF3CD;
+    border-left: 4px solid #FFC107;
+    padding: 1rem;
+    border-radius: 4px;
+    line-height: 1.6;
+  }
+
+  /* MODULES SECTION */
+  .modules-section {
+    margin: 4rem 0;
+  }
+
+  .modules-section h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  .modules-intro {
+    text-align: center;
+    color: var(--color-text-secondary);
+    margin-bottom: 2rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .modules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .module-card {
+    background: white;
+    border: 2px solid var(--color-surface);
+    border-radius: 8px;
+    padding: 1.5rem;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .module-card:hover {
+    border-color: var(--color-secondary);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .module-card-number {
+    display: inline-block;
+    background: var(--color-primary);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    width: fit-content;
+    margin-bottom: 0.75rem;
+  }
+
+  .module-card-title {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .module-card-description {
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    flex: 1;
+    margin-bottom: 1rem;
+  }
+
+  .module-card-link {
+    color: var(--color-secondary);
+    font-weight: 600;
+    font-size: 0.875rem;
+  }
+</style>

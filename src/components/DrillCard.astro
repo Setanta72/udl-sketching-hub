@@ -1,0 +1,274 @@
+---
+/**
+ * Drill Card Component
+ * Individual practice drill with difficulty indicator and scaffolding suggestions
+ * No filtering - all drills shown to all learners
+ */
+
+interface DrillOption {
+  title: string;
+  description: string;
+  difficulty: 'beginner' | 'intermediate' | 'advanced';
+}
+
+interface Props {
+  title: string;
+  description?: string;
+  difficulty?: 'beginner' | 'intermediate' | 'advanced';
+  scaffoldingSuggestion?: string;
+  estimatedTime?: string;
+  options?: DrillOption[];
+}
+
+const { title, description, difficulty, scaffoldingSuggestion, estimatedTime, options } = Astro.props;
+
+// Map difficulty to color and icon
+const difficultyConfig = {
+  beginner: { color: 'success', icon: '●', label: 'Beginner' },
+  intermediate: { color: 'accent', icon: '●●', label: 'Intermediate' },
+  advanced: { color: 'warning', icon: '●●●', label: 'Advanced' }
+};
+
+const config = difficulty ? difficultyConfig[difficulty] : null;
+---
+
+<div class="drill-card">
+  <div class="drill-header">
+    <h5 class="drill-title">{title}</h5>
+    <div class="drill-meta">
+      {config && (
+        <span class={`difficulty-badge difficulty-${config.color}`}>
+          <span class="difficulty-dots">{config.icon}</span>
+          <span class="difficulty-label">{config.label}</span>
+        </span>
+      )}
+      {estimatedTime && (
+        <span class="time-estimate">
+          <span class="time-icon">⏱</span>
+          {estimatedTime}
+        </span>
+      )}
+    </div>
+  </div>
+
+  {description && <p class="drill-description">{description}</p>}
+
+  {/* Render Options if present */}
+  {options && options.length > 0 && (
+    <div class="drill-options">
+      <p class="options-label">Choose your path:</p>
+      <div class="options-grid">
+        {options.map((option, index) => {
+          const optConfig = difficultyConfig[option.difficulty];
+          return (
+            <div class="drill-option">
+              <div class="option-header">
+                <span class="option-letter">{String.fromCharCode(65 + index)}</span>
+                <span class="option-title">{option.title}</span>
+                <span class={`difficulty-dot dot-${optConfig.color}`} title={optConfig.label}>•</span>
+              </div>
+              <p class="option-description">{option.description}</p>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  )}
+
+  {scaffoldingSuggestion && (
+    <div class="scaffolding-tip">
+      <div class="tip-icon">💡</div>
+      <div class="tip-content">
+        <p class="tip-label">Scaffolding Tip:</p>
+        <p class="tip-text">{scaffoldingSuggestion}</p>
+      </div>
+    </div>
+  )}
+</div>
+
+<style>
+  .drill-card {
+    background: white;
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-6);
+    transition: all var(--transition-base);
+  }
+
+  .drill-card:hover {
+    border-color: var(--color-secondary);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+
+  .drill-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--space-4);
+    margin-bottom: var(--space-4);
+  }
+
+  .drill-title {
+    font-size: var(--text-lg);
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin: 0;
+    flex: 1;
+  }
+
+  .drill-meta {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    align-items: flex-end;
+  }
+
+  .difficulty-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .difficulty-success {
+    background: var(--color-success-light);
+    color: var(--color-success-dark);
+  }
+
+  .difficulty-accent {
+    background: var(--color-accent-light);
+    color: var(--color-accent-dark);
+  }
+
+  .difficulty-warning {
+    background: var(--color-warning-light);
+    color: var(--color-warning-dark);
+  }
+
+  .difficulty-dots {
+    font-size: var(--text-sm);
+    line-height: 1;
+  }
+
+  .time-estimate {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+  }
+
+  .time-icon {
+    font-size: var(--text-base);
+  }
+
+  .drill-description {
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-4);
+  }
+
+  .scaffolding-tip {
+    display: flex;
+    gap: var(--space-3);
+    padding: var(--space-4);
+    background: var(--color-bg-accent);
+    border-left: 4px solid var(--color-secondary);
+    border-radius: var(--radius);
+    margin-top: var(--space-4);
+  }
+
+  .tip-icon {
+    font-size: var(--text-2xl);
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .tip-content {
+    flex: 1;
+  }
+
+  .tip-label {
+    font-weight: 600;
+    font-size: var(--text-sm);
+    color: var(--color-secondary-dark);
+    margin-bottom: var(--space-2);
+  }
+
+  .tip-text {
+    margin: 0;
+  }
+
+  /* Options Styles */
+  .drill-options {
+    margin: var(--space-4) 0;
+  }
+
+  .options-label {
+    font-weight: 600;
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-3);
+  }
+
+  .options-grid {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .drill-option {
+    background: var(--color-bg-secondary);
+    padding: var(--space-3);
+    border-radius: var(--radius);
+    border: 1px solid var(--color-border);
+  }
+
+  .option-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-2);
+  }
+
+  .option-letter {
+    background: var(--color-text-primary);
+    color: white;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--text-xs);
+    font-weight: 700;
+  }
+
+  .option-title {
+    font-weight: 600;
+    font-size: var(--text-sm);
+    color: var(--color-text-primary);
+    flex: 1;
+  }
+
+  .difficulty-dot {
+    font-size: var(--text-lg);
+    line-height: 0;
+  }
+
+  .dot-success { color: var(--color-success); }
+  .dot-accent { color: var(--color-accent); }
+  .dot-warning { color: var(--color-warning); }
+
+  .option-description {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    margin: 0;
+    padding-left: 28px; /* Align with title */
+  }
+</style>

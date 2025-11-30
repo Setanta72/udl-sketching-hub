@@ -1,0 +1,269 @@
+---
+/**
+ * Progression Gallery Component
+ * Shows side-by-side examples at three levels: Novice | Proficient | Mastery
+ * Each level has annotations highlighting what defines that quality
+ */
+
+interface GalleryExample {
+  imageUrl: string;
+  imageAlt: string;
+  annotations: string[];
+}
+
+interface Props {
+  novice?: GalleryExample;
+  proficient?: GalleryExample;
+  mastery?: GalleryExample;
+}
+
+const { novice, proficient, mastery } = Astro.props;
+
+// Only render if at least one example is provided
+const hasContent = novice || proficient || mastery;
+---
+
+{hasContent && (
+  <div class="progression-gallery">
+    <h4 class="gallery-heading">Example Progression</h4>
+    <p class="gallery-description">
+      See how this concept develops from novice work through proficiency to mastery.
+      Notice the specific differences in quality and execution.
+    </p>
+
+    <div class="gallery-grid">
+      {novice && (
+        <div class="gallery-column level-novice-column" data-level="novice">
+          <div class="level-badge level-novice-badge">
+            <span class="badge-icon">🔸</span>
+            <span class="badge-text">Novice</span>
+          </div>
+          <div class="example-card">
+            <div class="example-image">
+              <img src={novice.imageUrl} alt={novice.imageAlt} />
+            </div>
+            <div class="example-annotations">
+              <p class="annotations-label">What to notice:</p>
+              <ul class="annotations-list">
+                {novice.annotations.map((annotation) => (
+                  <li>{annotation}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {proficient && (
+        <div class="gallery-column level-proficient-column" data-level="proficient">
+          <div class="level-badge level-proficient-badge">
+            <span class="badge-icon">🔹</span>
+            <span class="badge-text">Proficient</span>
+          </div>
+          <div class="example-card">
+            <div class="example-image">
+              <img src={proficient.imageUrl} alt={proficient.imageAlt} />
+            </div>
+            <div class="example-annotations">
+              <p class="annotations-label">Quality markers:</p>
+              <ul class="annotations-list">
+                {proficient.annotations.map((annotation) => (
+                  <li>{annotation}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {mastery && (
+        <div class="gallery-column level-mastery-column" data-level="mastery">
+          <div class="level-badge level-mastery-badge">
+            <span class="badge-icon">✦</span>
+            <span class="badge-text">Mastery</span>
+          </div>
+          <div class="example-card">
+            <div class="example-image">
+              <img src={mastery.imageUrl} alt={mastery.imageAlt} />
+            </div>
+            <div class="example-annotations">
+              <p class="annotations-label">Excellence indicators:</p>
+              <ul class="annotations-list">
+                {mastery.annotations.map((annotation) => (
+                  <li>{annotation}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  </div>
+)}
+
+<style>
+  .progression-gallery {
+    margin: var(--space-12) 0;
+    padding: var(--space-8);
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-lg);
+    border: 2px solid var(--color-border);
+  }
+
+  .gallery-heading {
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-3);
+    font-family: var(--font-heading);
+  }
+
+  .gallery-description {
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-8);
+    line-height: var(--leading-relaxed);
+  }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-6);
+  }
+
+  @media (min-width: 1024px) {
+    .gallery-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .gallery-column {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .level-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius) var(--radius) 0 0;
+    font-weight: 600;
+    font-size: var(--text-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .level-novice-badge {
+    background: var(--color-warning-light);
+    color: var(--color-warning-dark);
+    border: 2px solid var(--color-warning);
+    border-bottom: none;
+  }
+
+  .level-proficient-badge {
+    background: var(--color-accent-light);
+    color: var(--color-accent-dark);
+    border: 2px solid var(--color-accent);
+    border-bottom: none;
+  }
+
+  .level-mastery-badge {
+    background: var(--color-success-light);
+    color: var(--color-success-dark);
+    border: 2px solid var(--color-success);
+    border-bottom: none;
+  }
+
+  .badge-icon {
+    font-size: var(--text-lg);
+  }
+
+  .example-card {
+    background: white;
+    border-radius: 0 0 var(--radius) var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .level-novice-column .example-card {
+    border: 2px solid var(--color-warning);
+    border-top: none;
+  }
+
+  .level-proficient-column .example-card {
+    border: 2px solid var(--color-accent);
+    border-top: none;
+  }
+
+  .level-mastery-column .example-card {
+    border: 2px solid var(--color-success);
+    border-top: none;
+  }
+
+  .example-image {
+    aspect-ratio: 4 / 3;
+    background: var(--color-bg-tertiary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .example-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .example-annotations {
+    padding: var(--space-5);
+    flex: 1;
+  }
+
+  .annotations-label {
+    font-weight: 600;
+    font-size: var(--text-sm);
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-3);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+
+  .annotations-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .annotations-list li {
+    position: relative;
+    padding-left: var(--space-5);
+    line-height: var(--leading-relaxed);
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+  }
+
+  .annotations-list li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    font-weight: 700;
+  }
+
+  .level-novice-column .annotations-list li::before {
+    color: var(--color-warning);
+  }
+
+  .level-proficient-column .annotations-list li::before {
+    color: var(--color-accent);
+  }
+
+  .level-mastery-column .annotations-list li::before {
+    color: var(--color-success);
+  }
+</style>

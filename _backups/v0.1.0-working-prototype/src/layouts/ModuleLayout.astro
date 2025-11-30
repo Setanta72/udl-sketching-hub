@@ -1,0 +1,233 @@
+---
+/**
+ * Module Layout
+ * Template for all 7 module pages
+ * Implements the 7-section structure defined in the UDL Brief
+ */
+
+import BaseLayout from './BaseLayout.astro';
+import DrillsList from '../components/DrillsList.astro';
+import CommonErrorsAccordion from '../components/CommonErrorsAccordion.astro';
+import ModesOfExpressionTabs from '../components/ModesOfExpressionTabs.astro';
+
+interface Props {
+  frontmatter: {
+    moduleNumber: number;
+    title: string;
+    description?: string;
+    resources?: {
+      video?: { title: string; url?: string; duration?: string };
+      guide?: { title: string; url?: string };
+      gallery?: { title: string; url?: string };
+    };
+    drills?: Array<{ text: string; paths: Array<'guided' | 'mastery'> }>;
+    modesOfExpression?: {
+      physical: string;
+      digital: string;
+    };
+    commonErrors?: Array<{
+      pitfall: string;
+      diagnosis: string;
+      correction: string;
+    }>;
+  };
+}
+
+const { frontmatter } = Astro.props;
+const { moduleNumber, title, description, resources, drills, modesOfExpression, commonErrors } = frontmatter;
+---
+
+<BaseLayout title={`Module ${moduleNumber}: ${title}`} description={description}>
+  <!-- MODULE HEADER -->
+  <div class="module-header">
+    <span class="module-number">Module {moduleNumber}</span>
+    <h1 class="module-title">{title}</h1>
+    {description && <p class="module-description">{description}</p>}
+  </div>
+
+  <!-- MODULE CONTENT: 7 Sections as defined in UDL Brief -->
+  <article class="module-content">
+
+    <!-- SECTION 1: CORE CONCEPTS -->
+    <!-- This content comes from the markdown body -->
+    <section class="module-section concepts-section">
+      <slot />
+    </section>
+
+    <!-- SECTION 2: RESOURCES -->
+    {resources && (
+      <section class="module-section resources-section">
+        <h3 class="section-heading">Resources</h3>
+        <p class="section-intro">Multiple ways to learn the same material.</p>
+
+        <div class="resources-grid">
+          {resources.video && (
+            <div class="resource-card">
+              <span class="resource-icon">🎥</span>
+              <h4>Video</h4>
+              <p>{resources.video.title}</p>
+              {resources.video.duration && <span class="duration">{resources.video.duration}</span>}
+              {resources.video.url && <a href={resources.video.url} target="_blank">Watch Now</a>}
+            </div>
+          )}
+
+          {resources.guide && (
+            <div class="resource-card">
+              <span class="resource-icon">📋</span>
+              <h4>Step-by-Step Guide</h4>
+              <p>{resources.guide.title}</p>
+              {resources.guide.url && <a href={resources.guide.url} target="_blank">Read Guide</a>}
+            </div>
+          )}
+
+          {resources.gallery && (
+            <div class="resource-card">
+              <span class="resource-icon">🖼️</span>
+              <h4>Gallery</h4>
+              <p>{resources.gallery.title}</p>
+              {resources.gallery.url && <a href={resources.gallery.url} target="_blank">View Gallery</a>}
+            </div>
+          )}
+        </div>
+      </section>
+    )}
+
+    <!-- SECTION 3: SKILLS & DRILLS -->
+    {drills && <DrillsList drills={drills} />}
+
+    <!-- SECTION 4: MODES OF EXPRESSION -->
+    {modesOfExpression && (
+      <ModesOfExpressionTabs
+        physical={modesOfExpression.physical}
+        digital={modesOfExpression.digital}
+      />
+    )}
+
+    <!-- SECTION 5: SELF-SUPPORT (COMMON ERRORS) -->
+    {commonErrors && <CommonErrorsAccordion errors={commonErrors} />}
+
+    <!-- SECTIONS 6 & 7: APPLICATION & MASTERY RUBRIC -->
+    <!-- These are included in the markdown body with specific headings -->
+
+  </article>
+</BaseLayout>
+
+<style>
+  .module-header {
+    text-align: center;
+    padding: 2rem 0 3rem;
+    border-bottom: 2px solid var(--color-surface, #F8F9FA);
+  }
+
+  .module-number {
+    display: inline-block;
+    background: var(--color-secondary, #E74C3C);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .module-title {
+    margin-top: 1rem;
+    font-size: 2.5rem;
+  }
+
+  .module-description {
+    margin-top: 0.75rem;
+    font-size: 1.125rem;
+    color: var(--color-text-secondary, #7F8C8D);
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .module-content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 0;
+  }
+
+  .module-section {
+    margin: 3rem 0;
+  }
+
+  /* RESOURCES GRID */
+  .resources-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+  }
+
+  .resource-card {
+    background: var(--color-surface, #F8F9FA);
+    border: 1px solid #E0E0E0;
+    border-radius: 8px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .resource-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .resource-icon {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 0.75rem;
+  }
+
+  .resource-card h4 {
+    font-size: 1.125rem;
+    margin-bottom: 0.5rem;
+    color: var(--color-primary, #2C3E50);
+  }
+
+  .resource-card p {
+    color: var(--color-text-secondary, #7F8C8D);
+    margin-bottom: 0.75rem;
+    line-height: 1.5;
+  }
+
+  .resource-card .duration {
+    display: block;
+    font-size: 0.875rem;
+    color: var(--color-text-secondary, #7F8C8D);
+    margin-bottom: 0.75rem;
+  }
+
+  .resource-card a {
+    display: inline-block;
+    background: var(--color-primary, #2C3E50);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: background 0.2s;
+  }
+
+  .resource-card a:hover {
+    background: var(--color-secondary, #E74C3C);
+  }
+
+  .section-heading {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-text-primary, #2C3E50);
+    margin-bottom: 0.5rem;
+  }
+
+  .section-intro {
+    color: var(--color-text-secondary, #7F8C8D);
+    margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+</style>

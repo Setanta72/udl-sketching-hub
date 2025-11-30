@@ -1,0 +1,156 @@
+---
+/**
+ * Modes of Expression Tabs Component
+ * Tabbed interface for Physical (Pen & Paper) vs Digital (Tablet & Software)
+ * Separate from Learning Mode toggle
+ */
+
+interface Props {
+  physical: string;
+  digital: string;
+}
+
+const { physical, digital } = Astro.props;
+---
+
+<div class="modes-section">
+  <h3 class="section-heading">Modes of Expression</h3>
+  <p class="section-intro">
+    Choose your preferred tools. Both paths are equally valid.
+  </p>
+
+  <div class="tabs-container">
+    <div class="tab-buttons" role="tablist">
+      <button
+        class="tab-button active"
+        role="tab"
+        aria-selected="true"
+        aria-controls="physical-panel"
+        data-tab="physical"
+      >
+        ✏️ Physical (Pen & Paper)
+      </button>
+      <button
+        class="tab-button"
+        role="tab"
+        aria-selected="false"
+        aria-controls="digital-panel"
+        data-tab="digital"
+      >
+        💻 Digital (Tablet & Software)
+      </button>
+    </div>
+
+    <div class="tab-panels">
+      <div
+        id="physical-panel"
+        class="tab-panel active"
+        role="tabpanel"
+        data-panel="physical"
+      >
+        <p>{physical}</p>
+      </div>
+      <div
+        id="digital-panel"
+        class="tab-panel"
+        role="tabpanel"
+        data-panel="digital"
+      >
+        <p>{digital}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .modes-section {
+    margin: 2rem 0;
+  }
+
+  .section-heading {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary, #2C3E50);
+    margin-bottom: 0.5rem;
+  }
+
+  .section-intro {
+    color: var(--text-secondary, #7F8C8D);
+    margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+
+  .tabs-container {
+    border: 1px solid #E0E0E0;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .tab-buttons {
+    display: flex;
+    background: var(--surface, #F8F9FA);
+    border-bottom: 1px solid #E0E0E0;
+  }
+
+  .tab-button {
+    flex: 1;
+    padding: 1rem;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-weight: 500;
+    color: var(--text-secondary, #7F8C8D);
+    transition: all 0.2s ease;
+    border-bottom: 3px solid transparent;
+  }
+
+  .tab-button:hover {
+    background: #EEEEEE;
+  }
+
+  .tab-button.active {
+    background: white;
+    color: var(--primary, #2C3E50);
+    border-bottom-color: var(--secondary, #E74C3C);
+  }
+
+  .tab-panels {
+    background: white;
+  }
+
+  .tab-panel {
+    display: none;
+    padding: 1.5rem;
+    line-height: 1.6;
+  }
+
+  .tab-panel.active {
+    display: block;
+  }
+</style>
+
+<script>
+  document.addEventListener('click', (e) => {
+    const button = (e.target as HTMLElement).closest('[data-tab]');
+    if (!button) return;
+
+    const tabName = button.getAttribute('data-tab');
+    const container = button.closest('.tabs-container');
+    if (!container) return;
+
+    // Update buttons
+    container.querySelectorAll('.tab-button').forEach((btn) => {
+      btn.classList.remove('active');
+      btn.setAttribute('aria-selected', 'false');
+    });
+    button.classList.add('active');
+    button.setAttribute('aria-selected', 'true');
+
+    // Update panels
+    container.querySelectorAll('.tab-panel').forEach((panel) => {
+      panel.classList.remove('active');
+    });
+    const activePanel = container.querySelector(`[data-panel="${tabName}"]`);
+    activePanel?.classList.add('active');
+  });
+</script>

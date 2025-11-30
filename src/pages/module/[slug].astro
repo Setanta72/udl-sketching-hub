@@ -1,0 +1,39 @@
+---
+/**
+ * DYNAMIC MODULE PAGE
+ * Generates a page for each module using the slug
+ * Uses ModuleLayout to apply the 7-section structure
+ */
+
+import { getCollection } from 'astro:content';
+import ModuleLayout from '../../layouts/ModuleLayout.astro';
+
+// Generate static paths for all modules
+export async function getStaticPaths() {
+  const modules = await getCollection('modules');
+  // Sort modules to ensure correct order
+  const sortedModules = modules.sort((a, b) => a.data.moduleNumber - b.data.moduleNumber);
+
+  return sortedModules.map((module, index) => {
+    const nextModule = index < sortedModules.length - 1 ? sortedModules[index + 1] : null;
+    return {
+      params: { slug: module.slug },
+      props: { 
+        module,
+        nextModule: nextModule ? {
+          title: nextModule.data.title,
+          slug: nextModule.slug,
+          moduleNumber: nextModule.data.moduleNumber
+        } : null
+      },
+    };
+  });
+}
+
+const { module, nextModule } = Astro.props;
+const { Content } = await module.render();
+---
+
+<ModuleLayout frontmatter={module.data} nextModule={nextModule}>
+  <Content />
+</ModuleLayout>

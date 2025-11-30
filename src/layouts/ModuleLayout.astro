@@ -1,0 +1,465 @@
+---
+/**
+ * Module Layout v2.0
+ * Template for all 7 module pages - concept-based structure
+ * Each module contains multiple concepts, each rendered as a ConceptBlock
+ */
+
+import BaseLayout from './BaseLayout.astro';
+import ConceptBlock from '../components/ConceptBlock.astro';
+import RubricTable from '../components/RubricTable.astro';
+import MasteryToggle from '../components/MasteryToggle.astro';
+
+interface Props {
+  frontmatter: {
+    moduleNumber: number;
+    title: string;
+    description: string;
+    estimatedTime: string;
+    prerequisites?: string[];
+    learningObjectives: string[];
+    whyItMatters: string;
+    concepts: any[];
+    rubric: any[];
+  };
+  nextModule?: {
+    title: string;
+    slug: string;
+    moduleNumber: number;
+  } | null;
+}
+
+const { frontmatter, nextModule } = Astro.props;
+const {
+  moduleNumber,
+  title,
+  description,
+  estimatedTime,
+  prerequisites,
+  learningObjectives,
+  whyItMatters,
+  concepts,
+  rubric
+} = frontmatter;
+
+// Sort concepts by order
+const sortedConcepts = [...concepts].sort((a, b) => a.order - b.order);
+---
+
+<BaseLayout title={`${frontmatter.title} | UDL Sketching`} description={description}>
+  <div class="module-container" id="module-top">
+    <header class="module-header">
+      <div class="module-meta">
+        <span class="module-number">Module {frontmatter.moduleNumber}</span>
+        <span class="module-time">{frontmatter.estimatedTime}</span>
+      </div>
+      <h1 class="module-title">{frontmatter.title}</h1>
+      <p class="module-description">{frontmatter.description}</p>
+      
+      <!-- v3.0 Mastery Toggle (Top) -->
+      <MasteryToggle />
+      <a href="#module-rubric" class="rubric-jump-link">
+        <span>Assess your level with the Rubric</span>
+        <span class="jump-arrow">↓</span>
+      </a>
+    </header>
+    <div class="module-meta">
+      <span class="meta-item">
+        <span class="meta-icon">⏱</span>
+        <span class="meta-label">Estimated Time:</span>
+        <span class="meta-value">{estimatedTime}</span>
+      </span>
+      {prerequisites && prerequisites.length > 0 && (
+        <span class="meta-item">
+          <span class="meta-icon">📚</span>
+          <span class="meta-label">Prerequisites:</span>
+          <span class="meta-value">{prerequisites.join(', ')}</span>
+        </span>
+      )}
+    </div>
+  </div>
+
+  <!-- MODULE OVERVIEW -->
+  <div class="module-overview">
+    <div class="overview-section">
+      <h2 class="overview-heading">What You'll Learn</h2>
+      <ul class="objectives-list">
+        {learningObjectives.map((objective) => (
+          <li>{objective}</li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="overview-section">
+      <h2 class="overview-heading">Why It Matters</h2>
+      <p class="why-it-matters">{whyItMatters}</p>
+    </div>
+  </div>
+
+  <!-- MODULE INTRODUCTION (from markdown body) -->
+  <div class="module-introduction prose">
+    <slot />
+  </div>
+
+  <!-- CONCEPT NAVIGATION -->
+  <nav class="concept-nav">
+    <h3 class="concept-nav-heading">Jump to Concept:</h3>
+    <div class="concept-nav-links">
+      {sortedConcepts.map((concept) => (
+        <a href={`#${concept.id}`} class="concept-nav-link">
+          <span class="concept-nav-number">{concept.order}</span>
+          <span class="concept-nav-title">{concept.title}</span>
+        </a>
+      ))}
+    </div>
+  </nav>
+
+  <!-- CONCEPT BLOCKS (The core learning content) -->
+  <div class="concepts-container">
+    {sortedConcepts.map((concept) => (
+      <ConceptBlock concept={concept} explanation={concept.explanation} />
+    ))}
+  </div>
+
+  <!-- MODULE RUBRIC -->
+  {rubric && rubric.length > 0 && (
+    <div class="rubric-container" id="module-rubric">
+      <!-- v3.0 Mastery Toggle (Bottom - Synced) -->
+      <div class="rubric-toggle-wrapper">
+        <p class="rubric-toggle-label">Adjust view for self-assessment:</p>
+        <MasteryToggle />
+        <a href="#module-top" class="rubric-jump-link">
+          <span class="jump-arrow">↑</span>
+          <span>Back to Top</span>
+        </a>
+      </div>
+      <RubricTable rubric={rubric} />
+    </div>
+  )}
+
+  <!-- MODULE NAVIGATION -->
+  <nav class="module-navigation">
+    <a href="/" class="nav-button nav-button-back">
+      <span class="nav-arrow">←</span>
+      <span>Back to Modules</span>
+    </a>
+    {nextModule && (
+      <a href={`/module/${nextModule.slug}`} class="nav-button nav-button-next">
+        <span>Next Module: {nextModule.title}</span>
+        <span class="nav-arrow">→</span>
+      </a>
+    )}
+  </nav>
+</BaseLayout>
+
+<style>
+  /* === MODULE HEADER === */
+  .module-header {
+    text-align: center;
+    padding: var(--space-12) 0;
+    border-bottom: 3px solid var(--color-border);
+    margin-bottom: var(--space-16);
+  }
+
+  .module-number-badge {
+    display: inline-block;
+    background: var(--color-primary);
+    color: white;
+    padding: var(--space-3) var(--space-6);
+    border-radius: var(--radius-xl);
+    font-weight: 700;
+    font-size: var(--text-base);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: var(--space-4);
+  }
+
+  .module-title {
+    font-size: var(--text-5xl);
+    font-weight: 800;
+    color: var(--color-primary);
+    margin-bottom: var(--space-4);
+  }
+
+  .module-description {
+    font-size: var(--text-xl);
+    color: var(--color-text-secondary);
+    max-width: 800px;
+    margin: 0 auto var(--space-8);
+    line-height: var(--leading-relaxed);
+  }
+
+  .module-meta {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-8);
+    flex-wrap: wrap;
+  }
+
+  .meta-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+  }
+
+  .meta-icon {
+    font-size: var(--text-xl);
+  }
+
+  .meta-label {
+    font-weight: 600;
+    color: var(--color-text-primary);
+  }
+
+  .meta-value {
+    color: var(--color-text-secondary);
+  }
+
+  /* === MODULE OVERVIEW === */
+  .module-overview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: var(--space-8);
+    margin-bottom: var(--space-16);
+  }
+
+  .overview-section {
+    background: var(--color-bg-secondary);
+    padding: var(--space-8);
+    border-radius: var(--radius-lg);
+    border: 2px solid var(--color-border);
+  }
+
+  .overview-heading {
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: var(--space-4);
+    font-family: var(--font-heading);
+  }
+
+  .objectives-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .objectives-list li {
+    position: relative;
+    padding-left: var(--space-8);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-secondary);
+  }
+
+  .objectives-list li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    font-weight: 700;
+    font-size: var(--text-xl);
+    color: var(--color-secondary);
+  }
+
+  .why-it-matters {
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-secondary);
+    font-size: var(--text-lg);
+  }
+
+  /* === MODULE INTRODUCTION === */
+  .module-introduction {
+    margin-bottom: var(--space-16);
+    line-height: var(--leading-relaxed);
+  }
+
+  .module-introduction :global(h2) {
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-top: var(--space-8);
+    margin-bottom: var(--space-4);
+  }
+
+  .module-introduction :global(p) {
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-4);
+  }
+
+  .module-introduction :global(strong) {
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+
+  /* === CONCEPT NAVIGATION === */
+  .concept-nav {
+    margin-bottom: var(--space-16);
+    padding: var(--space-8);
+    background: var(--color-primary);
+    border-radius: var(--radius-lg);
+    color: white;
+  }
+
+  .concept-nav-heading {
+    font-size: var(--text-xl);
+    font-weight: 700;
+    margin-bottom: var(--space-6);
+    font-family: var(--font-heading);
+  }
+
+  .concept-nav-links {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: var(--space-4);
+  }
+
+  .concept-nav-link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-4);
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius);
+    text-decoration: none;
+    color: white;
+    transition: all var(--transition-base);
+    border: 2px solid transparent;
+  }
+
+  .concept-nav-link:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: var(--color-secondary);
+    transform: translateX(4px);
+  }
+
+  .concept-nav-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: var(--color-secondary);
+    color: white;
+    border-radius: 50%;
+    font-weight: 700;
+    font-size: var(--text-sm);
+    flex-shrink: 0;
+  }
+
+  .concept-nav-title {
+    flex: 1;
+    font-weight: 500;
+  }
+
+  /* === CONCEPTS CONTAINER === */
+  .concepts-container {
+    margin-bottom: var(--space-20);
+  }
+
+  /* === MODULE NAVIGATION === */
+  .module-navigation {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-4);
+    margin-top: var(--space-20);
+    padding-top: var(--space-12);
+    border-top: 2px solid var(--color-border);
+  }
+
+  .nav-button {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-4) var(--space-8);
+    background: var(--color-primary);
+    color: white;
+    text-decoration: none;
+    border-radius: var(--radius-lg);
+    font-weight: 600;
+    font-size: var(--text-lg);
+    transition: all var(--transition-base);
+    box-shadow: var(--shadow);
+  }
+
+  .nav-button:hover {
+    background: var(--color-primary-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .nav-button-back {
+    margin-right: auto;
+  }
+
+  .nav-button-next {
+    margin-left: auto;
+  }
+
+  .nav-arrow {
+    font-size: var(--text-2xl);
+    line-height: 1;
+  }
+
+  /* Mobile responsive */
+  @media (max-width: 768px) {
+    .module-title {
+      font-size: var(--text-4xl);
+    }
+
+    .module-meta {
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-4);
+    }
+
+    .concept-nav-links {
+      grid-template-columns: 1fr;
+    }
+
+    .module-navigation {
+      flex-direction: column;
+    }
+
+    .nav-button-back,
+    .nav-button-next {
+      margin: 0;
+    }
+  }
+
+  .rubric-toggle-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: var(--space-8);
+  }
+
+  .rubric-toggle-label {
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-2);
+    font-size: var(--text-sm);
+  }
+
+  .rubric-jump-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+    color: var(--color-secondary);
+    font-weight: 600;
+    font-size: var(--text-sm);
+    text-decoration: none;
+    transition: color var(--transition-base);
+  }
+
+  .rubric-jump-link:hover {
+    color: var(--color-secondary-dark);
+    text-decoration: underline;
+  }
+
+  .jump-arrow {
+    font-size: 1.2em;
+  }
+</style>
